@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+
+    <WeaverConfiguration>
+      <Weavers>
+        <PropertyChanged />
+      </Weavers>
+    </WeaverConfiguration>
+
+    <Platforms>AnyCPU;x64</Platforms>
+
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+
+    <FileVersion>0.0.1.0</FileVersion>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <Version>0.0.1</Version>
+
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <Copyright>Copyright © 2021 frg2089</Copyright>
+
+    <RepositoryUrl>https://github.com/ShimakazeProj/Shimakaze.Framework</RepositoryUrl>
+
+    <RepositoryType>public</RepositoryType>
+
+    <PackageProjectUrl>https://github.com/ShimakazeProj/Shimakaze.Framework</PackageProjectUrl>
+  </PropertyGroup>
+				
+  <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\..\lib\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
+    <ProjectReference Include="..\..\lib\Shimakaze.LogTracer\src\Shimakaze.LogTracer.csproj" />
+  </ItemGroup>
+</Project>

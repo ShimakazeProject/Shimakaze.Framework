@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+		<PropertyGroup>
+				<OutputType>Exe</OutputType>
+				<TargetFramework>net5.0</TargetFramework>
+				<Platforms>AnyCPU;x64</Platforms>
+				<MonoGamePlatform>Windows</MonoGamePlatform>
+				<Nullable>enable</Nullable>
+				<ApplicationIcon>Assets\Images\Shimakaze.ico</ApplicationIcon>
+		</PropertyGroup>
+
+		<ItemGroup>
+		  <ProjectReference Include="..\Shimakaze.Framework\Shimakaze.Framework.csproj" />
+		</ItemGroup>
+
+		<ItemGroup>
+		  <None Update="Assets\Fonts\Roboto-Regular.ttf">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </None>
+		  <None Update="Assets\Fonts\simsun.ttf">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </None>
+		  <None Update="Assets\Images\background.png">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </None>
+		</ItemGroup>
+		
+		<Import Project="..\..\builds\CopyFNALibs.targets" />
+		
+</Project>

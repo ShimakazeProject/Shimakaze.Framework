@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+		<ItemGroup>
+				<_Files Include="$(OutDir)*.dll;$(OutDir)*.pdb;$(OutDir)*.json" />
+		</ItemGroup>
+
+		<Target Name="MoveAssembly" AfterTargets="CoreCompile">
+				<Move SourceFiles="@(_Files)" DestinationFolder="$(OutDir)lib\"/>
+				<Delete Files="$(OutDir)FNA.dll.config"/>
+		</Target>
+
+</Project>
