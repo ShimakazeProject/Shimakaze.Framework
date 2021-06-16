@@ -450,4 +450,4 @@ $RECYCLE.BIN/
 ##
 ## fnalib native
 ##
-lib/fnalibs/*
+lib/fnalibs/**/*
