@@ -8,25 +8,29 @@ namespace Shimakaze.Framework.Gtk4;
 public sealed class Gtk4Application : Application, IDisposable
 {
     private readonly Gtk.Application _native;
+    private readonly Gtk4Dispatcher _dispatcher;
     private bool _disposedValue;
 
     public Gtk4Application(string? applicationId)
     {
         _native = Gtk.Application.New(applicationId, Gio.ApplicationFlags.DefaultFlags);
+        _dispatcher = new(MainLoop);
+        Dispatcher = _dispatcher;
+
         _native.OnActivate += (_, _) => OnInitialize();
     }
 
-    public override void MainLoop()
+    private void MainLoop()
     {
         var args = Environment.GetCommandLineArgs();
+        SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(_dispatcher));
         var result = _native.Run(args.Length, args);
         Debug.Assert(result is 0);
     }
 
-    public override void Stop()
-    {
-        _native.Quit();
-    }
+    public override void Run() => _dispatcher.Run();
+
+    public override void Stop() => _native.Quit();
 
     public override void AddWindow(Window window)
     {

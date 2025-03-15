@@ -10,20 +10,35 @@ namespace Shimakaze.Framework.Win32;
 [SupportedOSPlatform("windows5.0")]
 public sealed class Win32Application : Application
 {
-    private readonly List<Window> _windows = [];
+    internal const uint WM_TASK = PInvoke.WM_USER + 1;
 
-    public override void Stop()
+    private readonly List<Window> _windows = [];
+    private readonly Win32Dispatcher _dispatcher;
+
+    public Win32Application() : base()
     {
-        PInvoke.PostQuitMessage(0);
+        _dispatcher = new(MainLoop);
+        Dispatcher = _dispatcher;
     }
 
-    public override void MainLoop()
+    public override void Run() => _dispatcher.Run();
+
+    public override void Stop() => PInvoke.PostQuitMessage(0);
+
+    private void MainLoop()
     {
+        if (OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
+            _dispatcher.Initialize();
+        SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(_dispatcher));
+
         OnInitialize();
         while (true)
         {
             if (!PInvoke.GetMessage(out var msg, HWND.Null, 0, 0))
                 break;
+
+            if (msg.message is WM_TASK)
+                _dispatcher.ExecuteTask();
 
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(msg);
@@ -47,4 +62,5 @@ public sealed class Win32Application : Application
         _windows.Remove(window);
         window.Closed -= Window_Closed;
     }
+
 }

@@ -22,4 +22,4 @@ application.Initialize += (_, _) =>
     window.Show();
 };
 
-application.MainLoop();
+application.Run();
