@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Shimakaze.Framework.TestHost": {
+      "commandName": "Project"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}

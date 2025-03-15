@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shimakaze.Framework.Gtk4\Shimakaze.Framework.Gtk4.csproj" />
+    <ProjectReference Include="..\Shimakaze.Framework.Win32\Shimakaze.Framework.Win32.csproj" />
+  </ItemGroup>
+
+</Project>
