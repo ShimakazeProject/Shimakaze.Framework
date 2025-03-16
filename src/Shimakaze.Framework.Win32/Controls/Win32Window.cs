@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 using Shimakaze.Framework.Controls;
 
@@ -12,7 +11,6 @@ using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Shimakaze.Framework.Win32.Controls;
 
-[SupportedOSPlatform("windows5.0")]
 public sealed class Win32Window : Window, IDisposable
 {
     private static readonly Lazy<HINSTANCE> HInstance = new(() => (HINSTANCE)Process.GetCurrentProcess().Handle);

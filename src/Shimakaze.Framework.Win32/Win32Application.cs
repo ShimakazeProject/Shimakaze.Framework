@@ -1,5 +1,3 @@
-using System.Runtime.Versioning;
-
 using Shimakaze.Framework.Controls;
 
 using Windows.Win32;
@@ -7,7 +5,6 @@ using Windows.Win32.Foundation;
 
 namespace Shimakaze.Framework.Win32;
 
-[SupportedOSPlatform("windows5.0")]
 public sealed class Win32Application : Application
 {
     internal const uint WM_TASK = PInvoke.WM_USER + 1;

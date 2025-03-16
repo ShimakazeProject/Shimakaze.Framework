@@ -7,23 +7,48 @@ using Shimakaze.Framework.Gtk4.Controls;
 using Shimakaze.Framework.Win32;
 using Shimakaze.Framework.Win32.Controls;
 
-Application application = OperatingSystem.IsWindowsVersionAtLeast(5)
-    ? new Win32Application()
-    : new Gtk4Application("org.shimakaze.test");
+static Application CreateApplication(string applicationId)
+{
+    if (OperatingSystem.IsWindowsVersionAtLeast(5))
+        return new Win32Application();
+
+    if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+        return new Gtk4Application(applicationId);
+
+    throw new PlatformNotSupportedException();
+}
+
+static Window CreateWindow(string title)
+{
+    if (OperatingSystem.IsWindowsVersionAtLeast(5))
+        return new Win32Window(title);
+
+    if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+        return new Gtk4Window(title);
+
+    throw new PlatformNotSupportedException();
+}
+
+static WebView CreateWebView()
+{
+    if (OperatingSystem.IsWindowsVersionAtLeast(5))
+        return new EdgeWebView2();
+
+    if (OperatingSystem.IsLinux())
+        return new WebKitGtk6WebView();
+
+    throw new PlatformNotSupportedException();
+}
+
+Application application = CreateApplication("org.shimakaze.test");
 
 application.Initialize += (_, _) =>
 {
-    Window window = OperatingSystem.IsWindowsVersionAtLeast(5)
-        ? new Win32Window("Test Window")
-        : new Gtk4Window("Test Window");
+    Window window = CreateWindow("Test Window");
 
     application.AddWindow(window);
 
-    WebView webView = OperatingSystem.IsWindowsVersionAtLeast(5)
-        ? new EdgeWebView2()
-        : OperatingSystem.IsLinux()
-            ? new WebKitGtk6WebView()
-            : throw new PlatformNotSupportedException();
+    WebView webView = CreateWebView();
 
     window.Content = webView;
 

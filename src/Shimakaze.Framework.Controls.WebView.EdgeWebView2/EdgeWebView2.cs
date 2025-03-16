@@ -8,7 +8,6 @@ using Shimakaze.Framework.Controls;
 
 namespace Shimakaze.Framework.Win32.Controls;
 
-[SupportedOSPlatform("windows5.0")]
 public sealed class EdgeWebView2 : WebView
 {
     private static CoreWebView2Environment? s_environment;

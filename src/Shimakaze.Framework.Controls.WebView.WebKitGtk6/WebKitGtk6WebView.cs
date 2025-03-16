@@ -1,12 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Versioning;
 
 using Shimakaze.Framework.Controls;
 
 namespace Shimakaze.Framework.Gtk4.Controls;
 
-[UnsupportedOSPlatform("OSX")]
-[UnsupportedOSPlatform("Windows")]
 public sealed class WebKitGtk6WebView : WebView
 {
     private readonly WebKit.WebView _native;

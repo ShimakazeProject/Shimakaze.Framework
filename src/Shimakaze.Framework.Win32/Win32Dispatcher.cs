@@ -5,7 +5,6 @@ using Windows.Win32;
 
 namespace Shimakaze.Framework.Win32;
 
-[SupportedOSPlatform("windows5.0")]
 public sealed class Win32Dispatcher : Dispatcher
 {
     private uint _threadId = 0;
