@@ -13,6 +13,7 @@ public sealed class Gtk4Application : Application, IDisposable
 
     public Gtk4Application(string? applicationId)
     {
+        Gtk.Module.Initialize();
         _native = Gtk.Application.New(applicationId, Gio.ApplicationFlags.DefaultFlags);
         _dispatcher = new(MainLoop);
         Dispatcher = _dispatcher;

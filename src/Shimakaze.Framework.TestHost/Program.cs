@@ -19,6 +19,16 @@ application.Initialize += (_, _) =>
 
     application.AddWindow(window);
 
+    WebView webView = OperatingSystem.IsWindowsVersionAtLeast(5)
+        ? new EdgeWebView2()
+        : OperatingSystem.IsLinux()
+            ? new WebKitGtk6WebView()
+            : throw new PlatformNotSupportedException();
+
+    window.Content = webView;
+
+    webView.NavigateTo("https://cn.bing.com");
+
     window.Show();
 };
 

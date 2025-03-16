@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Shimakaze.Framework.Gtk4.Controls</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GirCore.WebKit-6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shimakaze.Framework.Controls.WebView.Kernel\Shimakaze.Framework.Controls.WebView.Kernel.csproj" />
+    <ProjectReference Include="..\shimakaze.Framework.Gtk4\Shimakaze.Framework.Gtk4.csproj" />
+  </ItemGroup>
+
+</Project>

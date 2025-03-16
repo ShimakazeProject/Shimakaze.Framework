@@ -4,32 +4,39 @@ namespace Shimakaze.Framework.Gtk4.Controls;
 
 public sealed class Gtk4Window : Window, IDisposable
 {
-    private readonly Gtk.Window _native;
+    internal Gtk.Window Native { get; private set; }
     private bool _disposedValue;
 
     public Gtk4Window(string name) : base(name)
     {
-        _native = Gtk.Window.New();
-        if (Parent is Gtk4Window { _native: { } parent })
-            _native.SetParent(parent);
-        _native.SetTitle(Name);
-        _native.SetDefaultSize(Width, Height);
+        Native = Gtk.Window.New();
+        if (Parent is Gtk4Window { Native: { } parent })
+            Native.SetParent(parent);
+        Native.SetTitle(Name);
+        Native.SetDefaultSize(Width, Height);
 
-        _native.OnActivateDefault += (_, _) => OnInitialize();
-        _native.OnShow += (_, _) => OnActivated();
-        _native.OnCloseRequest += (_, _) =>
+        Native.OnActivateDefault += (_, _) => OnInitialize();
+        Native.OnShow += (_, _) => OnActivated();
+        Native.OnCloseRequest += (_, _) =>
         {
             WindowCloseEventArgs args = new();
             OnClosing(args);
             return !args.CanClose;
         };
-        _native.OnDestroy += (_, _) => OnClosed();
+        Native.OnDestroy += (_, _) => OnClosed();
 
     }
 
-    public override void Close() => _native.Close();
+    public override void Close() => Native.Close();
 
-    public override void Show() => _native.Show();
+    public override void Show() => Native.Show();
+
+    internal static Gtk4Window? FindWindow(UIElement? element) => element switch
+    {
+        null => null,
+        Gtk4Window window => window,
+        _ => FindWindow(element.Parent)
+    };
 
     private void Dispose(bool disposing)
     {
@@ -37,7 +44,7 @@ public sealed class Gtk4Window : Window, IDisposable
         {
             if (disposing)
             {
-                _native.Dispose();
+                Native.Dispose();
             }
 
             _disposedValue = true;
@@ -55,5 +62,5 @@ public sealed class Gtk4Window : Window, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    internal void AddToApplication(Gtk.Application application) => application.AddWindow(_native);
+    internal void AddToApplication(Gtk.Application application) => application.AddWindow(Native);
 }

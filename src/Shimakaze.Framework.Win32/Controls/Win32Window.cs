@@ -18,7 +18,7 @@ public sealed class Win32Window : Window, IDisposable
     private static readonly Lazy<HINSTANCE> HInstance = new(() => (HINSTANCE)Process.GetCurrentProcess().Handle);
 
     private readonly WNDCLASSW _wndClass;
-    private readonly HWND _hWnd;
+    internal HWND HWND { get; private set; }
     private bool _disposedValue;
 
     public string ClassName { get; }
@@ -40,7 +40,7 @@ public sealed class Win32Window : Window, IDisposable
             };
             PInvoke.RegisterClass(_wndClass);
 
-            _hWnd = PInvoke.CreateWindowEx(
+            HWND = PInvoke.CreateWindowEx(
                 WINDOW_EX_STYLE.WS_EX_LEFT,
                 pClassName,
                 pName,
@@ -49,20 +49,38 @@ public sealed class Win32Window : Window, IDisposable
                 Y is 0 ? PInvoke.CW_USEDEFAULT : Y,
                 Width is 0 ? PInvoke.CW_USEDEFAULT : Width,
                 Height is 0 ? PInvoke.CW_USEDEFAULT : Height,
-                (Parent as Win32Window)?._hWnd ?? HWND.Null,
+                (Parent as Win32Window)?.HWND ?? HWND.Null,
                 HMENU.Null,
                 HInstance.Value,
                 null
             );
-            if (_hWnd.IsNull)
+            if (HWND.IsNull)
                 throw new Win32Exception();
+
+            if (!PInvoke.GetWindowRect(HWND, out var rect))
+                throw new Win32Exception();
+
+            X = rect.X;
+            Y = rect.Y;
+            Width = rect.Width;
+            Height = rect.Height;
+
+            XChanged += Win32Window_SizeChanged;
+            YChanged += Win32Window_SizeChanged;
+            WidthChanged += Win32Window_SizeChanged;
+            HeightChanged += Win32Window_SizeChanged;
 
             if (OperatingSystem.IsWindowsVersionAtLeast(6, 0, 6000))
             {
                 BOOL value = true;
-                PInvoke.DwmSetWindowAttribute(_hWnd, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &value, (uint)Marshal.SizeOf(value));
+                PInvoke.DwmSetWindowAttribute(HWND, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, &value, (uint)Marshal.SizeOf(value));
             }
         }
+    }
+
+    private void Win32Window_SizeChanged(object? sender, ChangedEventArgs<int> e)
+    {
+        PInvoke.SetWindowPos(HWND, HWND.Null, X, Y, Width, Height, SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
     }
 
     private LRESULT WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
@@ -83,7 +101,7 @@ public sealed class Win32Window : Window, IDisposable
                 WindowCloseEventArgs args = new();
                 OnClosing(args);
                 if (args.CanClose)
-                    PInvoke.DestroyWindow(_hWnd);
+                    PInvoke.DestroyWindow(HWND);
                 break;
             case PInvoke.WM_DESTROY:
                 OnClosed();
@@ -94,11 +112,18 @@ public sealed class Win32Window : Window, IDisposable
 
     public override void Show()
     {
-        PInvoke.ShowWindow(_hWnd, SHOW_WINDOW_CMD.SW_SHOWDEFAULT);
-        PInvoke.UpdateWindow(_hWnd);
+        PInvoke.ShowWindow(HWND, SHOW_WINDOW_CMD.SW_SHOWDEFAULT);
+        PInvoke.UpdateWindow(HWND);
     }
 
-    public override void Close() => PInvoke.CloseWindow(_hWnd);
+    public override void Close() => PInvoke.CloseWindow(HWND);
+
+    internal static Win32Window? FindWindow(UIElement? element) => element switch
+    {
+        null => null,
+        Win32Window window => window,
+        _ => FindWindow(element.Parent)
+    };
 
     private void Dispose(bool disposing)
     {
@@ -108,7 +133,7 @@ public sealed class Win32Window : Window, IDisposable
             {
             }
 
-            PInvoke.DestroyWindow(_hWnd);
+            PInvoke.DestroyWindow(HWND);
             PInvoke.UnregisterClass(ClassName, Process.GetCurrentProcess().SafeHandle);
             _disposedValue = true;
         }

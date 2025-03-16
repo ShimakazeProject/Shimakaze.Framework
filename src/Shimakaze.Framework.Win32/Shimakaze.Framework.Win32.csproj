@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Shimakaze.Framework.Kernel\Shimakaze.Framework.Kernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Shimakaze.Framework.Controls.WebView.EdgeWebView2"/>
+  </ItemGroup>
+
 </Project>
