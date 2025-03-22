@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Binding.SourceGenerator": {
+      "commandName": "Project"
+    },
+    "Example": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\example\\Example\\Example.csproj"
+    }
+  }
+}

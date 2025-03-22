@@ -94,6 +94,15 @@ public sealed class Win32Window : Window, IDisposable
                 OnActivated();
                 break;
             case PInvoke.WM_SIZE:
+
+                if (!PInvoke.GetWindowRect(HWND, out var rect))
+                    throw new Win32Exception();
+
+                X = rect.X;
+                Y = rect.Y;
+                Width = rect.Width;
+                Height = rect.Height;
+
                 break;
             case PInvoke.WM_CLOSE:
                 WindowCloseEventArgs args = new();
