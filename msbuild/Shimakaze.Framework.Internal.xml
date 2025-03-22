@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule Name="Shimakaze.Framework" DisplayName="Shimakaze.Framework 项目选项" Order="75" PageTemplate="generic" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="Namespace" DisplayName="命名空间" />
+    <Category Name="AssemblyName" DisplayName="程序集名称" />
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" Label="Globals" />
+  </Rule.DataSource>
+
+  <BoolProperty Name="DisableRootNamespace"
+                DisplayName="禁用命名空间逻辑"
+                Description="禁止使用这里的命名空间处理逻辑"
+                Category="Namespace" />
+
+  <StringProperty Name="BaseRootNamespace"
+                DisplayName="基准命名空间"
+                Description="用作基准的命名空间"
+                Category="Namespace" />
+
+  <BoolProperty Name="DoNotAppendRootNamespace"
+                DisplayName="不要追加内容到命名空间"
+                Description="直接使用 $(BaseRootNamespace) 作为根命名空间"
+                Category="Namespace" />
+
+  <StringProperty Name="AppendRootNamespace"
+                DisplayName="追加内容到 $(BaseRootNamespace)."
+                Description="将内容追加到 $(BaseRootNamespace)."
+                Category="Namespace" />
+
+  <BoolProperty Name="DisableAssemblyName"
+                DisplayName="禁用程序集名称逻辑"
+                Description="禁止使用这里的程序集名称处理逻辑"
+                Category="AssemblyName" />
+
+  <StringProperty Name="BaseAssemblyName"
+                DisplayName="基准程序集名称"
+                Description="用作基准的程序集名称"
+                Category="AssemblyName" />
+
+  <BoolProperty Name="DoNotAppendAssemblyName"
+                DisplayName="不要追加内容到程序集名称"
+                Description="直接使用 $(BaseAssemblyName) 作为根程序集名称"
+                Category="AssemblyName" />
+
+  <StringProperty Name="AppendAssemblyName"
+                DisplayName="追加内容到 $(BaseAssemblyName)."
+                Description="将内容追加到 $(BaseAssemblyName)."
+                Category="AssemblyName" />
+
+</Rule>

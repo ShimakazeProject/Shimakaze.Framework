@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendRootNamespace>Controls</AppendRootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" GeneratePathProperty="true">
+      <ExcludeAssets>build;buildMultitargeting;buildTransitive</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\kernel\Controls.WebView\Controls.WebView.csproj" />
+    <ProjectReference Include="..\Win32\Win32.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)\WebView2.props" />
+  
+  <Import Project="$(ShimakazeFrameworkPropsPath)" />
+</Project>

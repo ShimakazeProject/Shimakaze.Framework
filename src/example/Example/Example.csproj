@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\global\Controls.WebView\Controls.WebView.csproj" />
+    <ProjectReference Include="..\..\global\Global\Global.csproj" />
+  </ItemGroup>
+
+</Project>

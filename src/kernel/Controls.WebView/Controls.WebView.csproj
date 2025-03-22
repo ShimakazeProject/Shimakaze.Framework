@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendRootNamespace>Controls</AppendRootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kernel\Kernel.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(ShimakazeFrameworkPropsPath)" />
+</Project>

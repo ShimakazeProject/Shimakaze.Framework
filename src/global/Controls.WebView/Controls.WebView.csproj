@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendRootNamespace>Controls</AppendRootNamespace>
+  </PropertyGroup>
+
+  <Import Project="$(ShimakazeFrameworkPropsPath)" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\gtk4\Controls.WebKitGtk6\Controls.WebKitGtk6.csproj" />
+    <ProjectReference Include="..\..\win32\Controls.EdgeWebView2\Controls.EdgeWebView2.csproj" />
+    <ProjectReference Include="..\Global\Global.csproj" />
+  </ItemGroup>
+</Project>

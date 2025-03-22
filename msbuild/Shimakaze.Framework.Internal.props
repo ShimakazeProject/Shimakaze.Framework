@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup Condition=" '$(DisableRootNamespace)' != 'True' ">
+    <RootNamespace Condition=" '$(AppendRootNamespace)' != '' ">$(BaseRootNamespace).$(AppendRootNamespace)</RootNamespace>
+    <RootNamespace Condition=" '$(DoNotAppendRootNamespace)' == 'True' ">$(BaseRootNamespace)</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(DisableAssemblyName)' != 'True' ">
+    <AssemblyName Condition=" '$(AppendAssemblyName)' != '' ">$(BaseAssemblyName).$(AppendAssemblyName)</AssemblyName>
+    <AssemblyName Condition=" '$(DoNotAppendAssemblyName)' == 'True' ">$(BaseAssemblyName)</AssemblyName>
+  </PropertyGroup>
+
+</Project>

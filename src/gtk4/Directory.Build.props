@@ -1,0 +1,10 @@
+<Project>
+
+  <PropertyGroup>
+    <BaseRootNamespace>Gtk4</BaseRootNamespace>
+    <BaseAssemblyName>Gtk4</BaseAssemblyName>
+  </PropertyGroup>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+</Project>

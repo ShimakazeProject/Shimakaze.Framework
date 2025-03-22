@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendRootNamespace>Controls</AppendRootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GirCore.WebKit-6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\kernel\Controls.WebView\Controls.WebView.csproj" />
+    <ProjectReference Include="..\Gtk4\Gtk4.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(ShimakazeFrameworkPropsPath)" />
+</Project>

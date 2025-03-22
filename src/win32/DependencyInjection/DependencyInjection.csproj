@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Extensions.DependencyInjection</RootNamespace>
+    <DisableRootNamespace>True</DisableRootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\kernel\DependencyInjection\DependencyInjection.csproj" />
+    <ProjectReference Include="..\Win32\Win32.csproj" />
+  </ItemGroup>
+  <Import Project="$(ShimakazeFrameworkPropsPath)" />
+</Project>

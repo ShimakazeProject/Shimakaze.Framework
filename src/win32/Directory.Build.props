@@ -1,0 +1,10 @@
+<Project>
+
+  <PropertyGroup>
+    <BaseRootNamespace>Win32</BaseRootNamespace>
+    <BaseAssemblyName>Win32</BaseAssemblyName>
+  </PropertyGroup>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+</Project>

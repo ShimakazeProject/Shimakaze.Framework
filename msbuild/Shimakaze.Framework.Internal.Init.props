@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <AppendRootNamespace Condition=" '$(AppendRootNamespace)' == '' ">$(MSBuildProjectName.Replace(" ", "_"))</AppendRootNamespace>
+    <BaseRootNamespace Condition=" '$(BaseRootNamespace)' != '' ">Shimakaze.Framework.$(BaseRootNamespace)</BaseRootNamespace>
+    <BaseRootNamespace Condition=" '$(BaseRootNamespace)' == '' ">Shimakaze.Framework</BaseRootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AppendAssemblyName Condition=" '$(AppendAssemblyName)' == '' ">$(MSBuildProjectName)</AppendAssemblyName>
+    <BaseAssemblyName Condition=" '$(BaseAssemblyName)' != '' ">Shimakaze.Framework.$(BaseAssemblyName)</BaseAssemblyName>
+    <BaseAssemblyName Condition=" '$(BaseAssemblyName)' == '' ">Shimakaze.Framework</BaseAssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ShimakazeFrameworkPropsPath>$(MSBuildThisFileDirectory)\Shimakaze.Framework.Internal.props</ShimakazeFrameworkPropsPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)\Shimakaze.Framework.Internal.xml" Context="Project" />
+  </ItemGroup>
+</Project>
