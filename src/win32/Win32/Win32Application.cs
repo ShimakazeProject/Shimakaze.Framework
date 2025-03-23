@@ -1,63 +1,38 @@
 using Shimakaze.Framework.Controls;
+using Shimakaze.Framework.Win32.Controls;
 
 using Windows.Win32;
-using Windows.Win32.Foundation;
 
 namespace Shimakaze.Framework.Win32;
 
-public sealed class Win32Application : Application
+public sealed class Win32Application(Dispatcher dispatcher, string applicationId) : Application(dispatcher)
 {
-    internal const uint WM_TASK = PInvoke.WM_USER + 1;
+    private bool _isAppendedWindow = false;
 
-    private readonly List<Window> _windows = [];
-    private readonly Win32Dispatcher _dispatcher;
+    private readonly List<Win32Window> _windows = [];
+    internal bool ShouldQuit => _isAppendedWindow && _windows.Count is 0;
 
-    public Win32Application() : base()
+    public override Window CreateWindow(string title)
     {
-        _dispatcher = new(MainLoop);
-        Dispatcher = _dispatcher;
+        Win32Window window = new(title);
+        _windows.Add(window);
+        _isAppendedWindow = true;
+        window.Closed += Window_Closed;
+        return window;
     }
 
-    public override void Run() => _dispatcher.Run();
+    public override void Run() => Dispatcher.Run();
 
     public override void Stop() => PInvoke.PostQuitMessage(0);
 
-    private void MainLoop()
-    {
-        if (OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
-            _dispatcher.Initialize();
-        SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(_dispatcher));
-
-        OnInitialize();
-        while (true)
-        {
-            if (!PInvoke.GetMessage(out var msg, HWND.Null, 0, 0))
-                break;
-
-            if (msg.message is WM_TASK)
-                _dispatcher.ExecuteTask();
-
-            PInvoke.TranslateMessage(msg);
-            PInvoke.DispatchMessage(msg);
-
-            if (_windows.Count is 0)
-                PInvoke.PostQuitMessage(0);
-        }
-    }
-
-    public override void AddWindow(Window window)
-    {
-        _windows.Add(window);
-        window.Closed += Window_Closed;
-    }
-
     private void Window_Closed(object? sender, EventArgs e)
     {
-        if (sender is not Window window)
+        if (sender is not Win32Window window)
             return;
 
-        _windows.Remove(window);
         window.Closed -= Window_Closed;
+        _windows.Remove(window);
     }
 
+    internal new void OnInitialize() => base.OnInitialize();
 }

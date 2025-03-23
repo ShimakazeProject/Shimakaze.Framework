@@ -19,7 +19,4 @@ public abstract partial class UIElement
 
     [PropertyChangedEvent]
     public virtual partial Visibility Visibility { get; set; }
-
-    [EventMethod]
-    public event EventHandler? Initialize;
 }

@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Shimakaze.Framework.Controls</InterceptorsPreviewNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +14,7 @@
     <ProjectReference Include="..\..\global\DependencyInjection\DependencyInjection.csproj" />
     <ProjectReference Include="..\..\global\Global\Global.csproj" />
     <ProjectReference Include="..\..\kernel\Hosting\Hosting.csproj" />
+    <ProjectReference Include="..\..\tools\Binding.SourceGenerator\Binding.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

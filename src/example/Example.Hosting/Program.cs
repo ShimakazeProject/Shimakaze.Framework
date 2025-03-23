@@ -6,29 +6,18 @@ using Shimakaze.Framework;
 using Shimakaze.Framework.Controls;
 using Shimakaze.Framework.Hosting;
 
-Console.WriteLine("Hello, World!");
-
 var builder = Host.CreateApplicationBuilder();
-builder.Services
-    .AddApplication("org.shimakaze.example.hosting")
-    .UseShimakazeFramework((app, _) =>
-    {
-        if (app is not Application application)
-            return;
-
-        Window window = WindowUtils.CreateWindow("Test Window");
-
-        application.AddWindow(window);
-
-        WebView webView = WebViewUtils.CreateWebView();
-
-        window.Content = webView;
-
-        webView.NavigateTo("https://cn.bing.com");
-
-        window.Show();
-    });
+builder.Services.AddShimakazeFramework("org.shimakaze.example.hosting");
 
 var app = builder.Build();
+
+app.UseShimakazeFramework(application => application
+    .CreateWindow("Test Window", window => application
+        .CreateWebView(window, webView => webView
+            .Bind(i => i.Width, window, i => i.Width)
+            .Bind(i => i.Height, window, i => i.Height)
+            .NavigateTo("https://cn.bing.com")))
+    .Show()
+);
 
 app.Run();

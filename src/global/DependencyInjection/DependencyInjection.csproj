@@ -8,8 +8,7 @@
   <Import Project="$(ShimakazeFrameworkPropsPath)" />
 
   <ItemGroup>
-    <ProjectReference Include="..\..\gtk4\DependencyInjection\DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\win32\DependencyInjection\DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\kernel\DependencyInjection\DependencyInjection.csproj" />
     <ProjectReference Include="..\Global\Global.csproj" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
 
 using System.Runtime.Versioning;
 
-[assembly: SupportedOSPlatform("windows5.0")]
+[assembly: SupportedOSPlatform("windows6.1")]

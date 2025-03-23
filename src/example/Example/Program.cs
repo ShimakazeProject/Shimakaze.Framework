@@ -3,23 +3,12 @@
 using Shimakaze.Framework;
 using Shimakaze.Framework.Controls;
 
-Application application = ApplicationUtils.CreateApplication("org.shimakaze.test");
-
-application.Initialize += (_, _) =>
-{
-    Window window = WindowUtils.CreateWindow("Test Window");
-
-    application.AddWindow(window);
-
-    WebView webView = WebViewUtils.CreateWebView();
-
-    window.Content = webView;
-    webView.Bind(i => i.Width, window, i => i.Width);
-    webView.Bind(i => i.Height, window, i => i.Height);
-
-    webView.NavigateTo("https://cn.bing.com");
-
-    window.Show();
-};
-
-application.Run();
+Platform
+    .CreateApplication("org.shimakaze.example")
+    .Run(application => application
+        .CreateWindow("Test Window", window => application
+            .CreateWebView(window, webView => webView
+                .Bind(i => i.Width, window, i => i.Width)
+                .Bind(i => i.Height, window, i => i.Height)
+                .NavigateTo("https://cn.bing.com")))
+        .Show());

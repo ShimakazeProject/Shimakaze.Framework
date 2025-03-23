@@ -15,7 +15,6 @@ public sealed class Gtk4Window : Window, IDisposable
         Native.SetTitle(Name);
         Native.SetDefaultSize(Width, Height);
 
-        Native.OnActivateDefault += (_, _) => OnInitialize();
         Native.OnShow += (_, _) => OnActivated();
         Native.OnCloseRequest += (_, _) =>
         {
@@ -62,5 +61,5 @@ public sealed class Gtk4Window : Window, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    internal void AddToApplication(Gtk.Application application) => application.AddWindow(Native);
+    internal void AppendToApplication(Gtk.Application application) => application.AddWindow(Native);
 }

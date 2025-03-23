@@ -20,6 +20,8 @@ GetWindowRect
 SetWindowPos
 GetCurrentThreadId
 GetMessage
+PeekMessage
+WaitMessage
 PostThreadMessage
 TranslateMessage
 DispatchMessage

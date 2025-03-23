@@ -7,8 +7,8 @@ public sealed class DispatcherSynchronizationContext(Dispatcher dispatcher) : Sy
         if (dispatcher.CheckAccess())
             d(state);
         else
-            dispatcher.Invoke(() => d(state));
+            dispatcher.Invoke(DispatcherPriority.Normal, () => d(state));
     }
 
-    public override void Post(SendOrPostCallback d, object? state) => dispatcher.Invoke(() => d(state));
+    public override void Post(SendOrPostCallback d, object? state) => dispatcher.Invoke(DispatcherPriority.Normal, () => d(state));
 }

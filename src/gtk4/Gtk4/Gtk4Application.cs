@@ -8,39 +8,34 @@ namespace Shimakaze.Framework.Gtk4;
 public sealed class Gtk4Application : Application, IDisposable
 {
     private readonly Gtk.Application _native;
-    private readonly Gtk4Dispatcher _dispatcher;
     private bool _disposedValue;
 
-    public Gtk4Application(string? applicationId)
+    public Gtk4Application(Dispatcher dispatcher, string? applicationId) : base(dispatcher)
     {
         Gtk.Module.Initialize();
         _native = Gtk.Application.New(applicationId, Gio.ApplicationFlags.DefaultFlags);
-        _dispatcher = new(MainLoop);
-        Dispatcher = _dispatcher;
-
         _native.OnActivate += (_, _) => OnInitialize();
     }
 
-    private void MainLoop()
+    internal void MainLoop()
     {
         var args = Environment.GetCommandLineArgs();
-        SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(_dispatcher));
         var result = _native.Run(args.Length, args);
         Debug.Assert(result is 0);
     }
 
-    public override void Run() => _dispatcher.Run();
+    public override void Run() => Dispatcher.Run();
 
     public override void Stop() => _native.Quit();
 
-    public override void AddWindow(Window window)
+    public override Window CreateWindow(string title)
     {
-        if (window is not Gtk4Window win)
-            throw new InvalidCastException();
+        Gtk4Window window = new(title);
 
-        win.AddToApplication(_native);
+        window.AppendToApplication(_native);
+
+        return window;
     }
-
 
     private void Dispose(bool disposing)
     {

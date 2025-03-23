@@ -1,18 +1,25 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Shimakaze.Framework.Hosting;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection UseShimakazeFramework(this IServiceCollection services, EventHandler initialize)
+    public static void UseShimakazeFramework(this IHost app, Action<Application> initialize)
     {
-        services
-            .AddSingleton(new ShimakazeFrameworkServiceOptions()
+        var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+        lifetime.ApplicationStarted.Register(() =>
+        {
+            var logger = app.Services.GetRequiredService<ILogger<Application>>();
+            var application = app.Services.GetRequiredService<Application>();
+            _ = Task.Run(() =>
             {
-                OnInitialize = initialize
-            })
-            .AddHostedService<ShimakazeFrameworkService>();
-
-        return services;
+                logger.LogInformation("Starting main message loop...");
+                application.Run(initialize);
+                logger.LogInformation("Main message loop exited.");
+                lifetime.StopApplication();
+            }).ConfigureAwait(false);
+        });
     }
 }

@@ -1,34 +1,31 @@
 namespace Shimakaze.Framework.Gtk4;
 
-public sealed class Gtk4Dispatcher(ThreadStart mainLoop) : Dispatcher(mainLoop)
+public sealed class Gtk4Dispatcher : Dispatcher
 {
-    public override void Invoke(Action action)
+    protected override void Enqueue(DispatcherPriority priority, DispatchedHandler handler)
     {
-        GLib.Functions.IdleAdd(GLib.Constants.PRIORITY_DEFAULT, () =>
+        GLib.Functions.IdleAdd(
+            priority switch
+            {
+                DispatcherPriority.Idle => GLib.Constants.PRIORITY_DEFAULT_IDLE,
+                DispatcherPriority.Low => GLib.Constants.PRIORITY_LOW,
+                DispatcherPriority.Normal => GLib.Constants.PRIORITY_DEFAULT,
+                DispatcherPriority.High => GLib.Constants.PRIORITY_HIGH,
+                _ => GLib.Constants.PRIORITY_DEFAULT,
+            },
+            () =>
         {
-            action();
+            handler.Invoke();
             return false;
         });
     }
 
-    public override Task InvokeAsync(Action action)
+    protected override void MainLoop()
     {
-        TaskCompletionSource taskCompletionSource = new();
-        GLib.Functions.IdleAdd(GLib.Constants.PRIORITY_DEFAULT, () =>
-        {
-            try
-            {
-                action();
-                taskCompletionSource.SetResult();
-            }
-            catch (Exception e)
-            {
-                taskCompletionSource.SetException(e);
-            }
-            return false;
-        });
-        return taskCompletionSource.Task;
-    }
+        base.MainLoop();
+        if (Application.Instance is not Gtk4Application app)
+            throw new InvalidOperationException();
 
-    internal new void Run() => base.Run();
+        app.MainLoop();
+    }
 }

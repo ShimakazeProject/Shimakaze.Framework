@@ -17,7 +17,8 @@ public sealed class EdgeWebView2 : WebView
 
     public EdgeWebView2()
     {
-        if (s_environment is null)
+        if (s_environment is null && s_initializeTask is null)
+        {
             s_initializeTask = CoreWebView2Environment
                 .CreateAsync(
                     browserExecutableFolder: null,
@@ -27,6 +28,9 @@ public sealed class EdgeWebView2 : WebView
                 {
                     s_environment = await task;
                 });
+
+            s_initializeTask.Wait();
+        }
     }
 
     private async void EdgeWebView2_SizeChanged(object? sender, ChangedEventArgs<int> e)
@@ -46,6 +50,8 @@ public sealed class EdgeWebView2 : WebView
     protected override async void OnParentChanged(ChangedEventArgs<UIElement?> eventArgs)
     {
         base.OnParentChanged(eventArgs);
+
+        s_initializeTask?.Wait();
 
         XChanged -= EdgeWebView2_SizeChanged;
         YChanged -= EdgeWebView2_SizeChanged;

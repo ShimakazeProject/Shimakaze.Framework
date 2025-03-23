@@ -60,7 +60,7 @@ public sealed class BindingInitializeGenerator : IIncrementalGenerator
 
                 internal static partial class BindingExtensions
                 {
-                    public static void Bind<TTargetElement, TTargetType, TSourceElement, TSourceType>(
+                    public static TTargetElement Bind<TTargetElement, TTargetType, TSourceElement, TSourceType>(
                         this TTargetElement targetElement,
                         Expression<Func<TTargetElement, TTargetType>> target,
                         TSourceElement sourceElement,

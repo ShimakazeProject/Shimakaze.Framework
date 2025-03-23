@@ -86,7 +86,6 @@ public sealed class Win32Window : Window, IDisposable
         switch (msg)
         {
             case PInvoke.WM_CREATE:
-                OnInitialize();
                 break;
             case PInvoke.WM_PAINT:
                 break;
@@ -94,14 +93,24 @@ public sealed class Win32Window : Window, IDisposable
                 OnActivated();
                 break;
             case PInvoke.WM_SIZE:
-
                 if (!PInvoke.GetWindowRect(HWND, out var rect))
                     throw new Win32Exception();
 
+                XChanged -= Win32Window_SizeChanged;
                 X = rect.X;
+                XChanged += Win32Window_SizeChanged;
+
+                YChanged -= Win32Window_SizeChanged;
                 Y = rect.Y;
+                YChanged += Win32Window_SizeChanged;
+
+                WidthChanged -= Win32Window_SizeChanged;
                 Width = rect.Width;
+                WidthChanged += Win32Window_SizeChanged;
+
+                HeightChanged -= Win32Window_SizeChanged;
                 Height = rect.Height;
+                HeightChanged += Win32Window_SizeChanged;
 
                 break;
             case PInvoke.WM_CLOSE:

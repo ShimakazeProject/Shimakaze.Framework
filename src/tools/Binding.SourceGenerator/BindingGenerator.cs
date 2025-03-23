@@ -130,7 +130,7 @@ public sealed class BindingGenerator : IIncrementalGenerator
                     foreach (var info in group)
                         sb.AppendLine($"    {info.InterceptsLocation}");
                     sb.AppendLine("    [EditorBrowsable(EditorBrowsableState.Never)]");
-                    sb.Append($"    public static void {group.Key}(");
+                    sb.Append($"    public static {targetElementType} {group.Key}(");
                     sb.Append($"this {targetElementType} targetElement, ");
                     sb.Append($"Expression<Func<{targetElementType}, {targetType}>> target, ");
                     sb.Append($"{sourceElementType} sourceElement, ");
@@ -170,6 +170,7 @@ public sealed class BindingGenerator : IIncrementalGenerator
                         sb.AppendLine($"        targetElement.{first.TargetPropertyName}Changed += oneWayToSource;");
                     }
 
+                    sb.AppendLine("        return targetElement;");
                     sb.AppendLine("    }");
                     sb.AppendLine();
                 }

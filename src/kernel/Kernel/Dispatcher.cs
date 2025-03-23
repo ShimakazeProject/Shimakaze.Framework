@@ -1,23 +1,61 @@
-using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Shimakaze.Framework;
 
-public abstract class Dispatcher(ThreadStart mainLoop)
+/// <summary>
+/// 调度器
+/// </summary>
+/// <param name="mainLoop"></param>
+public abstract class Dispatcher
 {
-    protected readonly ConcurrentQueue<(Action Action, TaskCompletionSource? Promise)> _tasks = [];
-    public Thread Thread { get; } = new(mainLoop)
-    {
-        Name = "UI Thread",
-        IsBackground = false,
-    };
+    private readonly Thread _thread;
+    private readonly Lazy<DispatcherSynchronizationContext> _synchronizationContext;
 
-    public abstract void Invoke(Action action);
-    public abstract Task InvokeAsync(Action action);
-    internal bool CheckAccess() => Thread == Thread.CurrentThread;
+    public DispatcherSynchronizationContext DispatcherSynchronizationContext => _synchronizationContext.Value;
 
-    protected void Run()
+    protected Dispatcher()
     {
-        Thread.Start();
-        Thread.Join();
+        _synchronizationContext = new(() => new(this));
+        _thread = new(MainLoop)
+        {
+            Name = "UI Thread",
+            IsBackground = false,
+        };
+
+        if (OperatingSystem.IsWindows())
+            _thread.SetApartmentState(ApartmentState.STA);
+    }
+
+    internal bool CheckAccess() => _thread == Thread.CurrentThread;
+
+    protected abstract void Enqueue(DispatcherPriority priority, DispatchedHandler handler);
+
+    protected virtual void MainLoop() => SynchronizationContext.SetSynchronizationContext(DispatcherSynchronizationContext);
+
+    public void Run()
+    {
+        _thread.Start();
+        _thread.Join();
+    }
+
+    public void Invoke(DispatcherPriority priority, Action action) => Enqueue(priority, action);
+
+    public void Invoke(DispatcherPriority priority, Action<CancellationToken> action) => Enqueue(priority, action);
+
+    public async Task<TResult> InvokeAsync<TResult>(DispatcherPriority priority, Func<TResult> func)
+    {
+        DispatchedHandler handler = new(Unsafe.As<Func<object>>(func));
+        Enqueue(priority, handler);
+        var result = await handler.ReturnableTask!;
+        return (TResult)result;
+    }
+
+    public async Task<TResult> InvokeAsync<TResult>(DispatcherPriority priority, Func<CancellationToken, TResult> func)
+    {
+        DispatchedHandler handler = new(Unsafe.As<Func<CancellationToken, object>>(func));
+        Enqueue(priority, handler);
+        var result = await handler.ReturnableTask!;
+        return (TResult)result;
     }
 }
