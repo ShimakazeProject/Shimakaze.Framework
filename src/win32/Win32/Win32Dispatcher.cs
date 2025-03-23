@@ -53,7 +53,10 @@ public sealed class Win32Dispatcher : Dispatcher
         {
             if (!PInvoke.PeekMessage(out var msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
-                if (TryDequeue(DispatcherPriority.Idle, out var handler))
+                if (TryDequeue(DispatcherPriority.High, out var handler)
+                    || TryDequeue(DispatcherPriority.Normal, out handler)
+                    || TryDequeue(DispatcherPriority.Low, out handler)
+                    || TryDequeue(DispatcherPriority.Idle, out handler))
                 {
                     // 没有消息时尝试调用闲置任务
                     handler.Invoke();
